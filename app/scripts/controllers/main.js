@@ -12,12 +12,11 @@ angular.module('primeTableApp')
     //I like to 'declare' all my scope variable at the top so it's easy to find
     $scope.nPrime = 10;
     $scope.lsPrime = [];
-    $scope.tablePrime = [];
     $scope.storePrime = { list: [], maxCheckNum: 0 };
     $scope.communication = '';
     $scope.style = '';
 
-    var findPrimes = function (nPrime) {
+    $scope.findPrimes = function (nPrime) {
 
       //Init. pushes the first prime, 2, in the list and 1 has a display helper
       var lsPrime = [1,2];
@@ -62,22 +61,22 @@ angular.module('primeTableApp')
       $scope.storePrime.maxCheckNum = num;
     };
 
-    var displayPrimes = function() {
+    $scope.displayPrimes = function() {
       if($scope.storePrime.list.length - 1 > $scope.nPrime) {
-        findPrimes($scope.nPrime);
+        $scope.findPrimes($scope.nPrime);
       }
       $scope.lsPrime = $scope.storePrime.list.slice(0, parseInt($scope.nPrime)+ 1);
     };
 
     $scope.update = function () {
 
-      findPrimes($scope.nPrime);
+      $scope.findPrimes($scope.nPrime);
 
       var tooBig;
       $scope.style = '';
 
       if($scope.nPrime < 300) {
-        displayPrimes();
+        $scope.displayPrimes();
       } else {
         $scope.lsPrime = [];
         tooBig = 'Sorry the number you\'ve type is too big to display into a table! ';
@@ -99,7 +98,7 @@ angular.module('primeTableApp')
     };
 
     //init
-    displayPrimes();
+    $scope.displayPrimes();
 
     $scope.$watch('nPrime', function() {
 
