@@ -3,9 +3,12 @@
     <input type="text" id="nPrime" value="" ng-model="nPrime">
 </div>
 
-<table class="prime-table table">
-
+<table class="prime-table table table-bordered">
   <tr ng-repeat="prime in lsPrime">
-      <td ng-repeat="primeMult in lsPrime">{{prime * primeMult}}</td>
+      <td ng-repeat="primeMult in lsPrime">{{ prime * primeMult }}</td>
   </tr>
 </table>
+
+<div class="user-communication" ng-class="style">
+    {{ communication }}
+</div>
