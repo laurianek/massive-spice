@@ -19,14 +19,14 @@ angular.module('primeTableApp')
     $scope.findPrimes = function (nPrime) {
 
       //Init. pushes the first prime, 2, in the list and 1 has a display helper
-      var lsPrime = [1,2];
+      var lsPrime = [1, 2];
       var num = 3;
 
       //If the asked number prime is lower than has been calculated before, don't calculate again
-      if($scope.storePrime.list.length - 1 > nPrime) {
+      if ($scope.storePrime.list.length - 1 > nPrime) {
         return;
 
-      } else if ($scope.storePrime.list.length === 0 ) {
+      } else if ($scope.storePrime.list.length === 0) {
         $scope.storePrime.list = lsPrime;
         $scope.storePrime.maxCheckNum = 2;
 
@@ -39,7 +39,7 @@ angular.module('primeTableApp')
       // as even numbers are not primes except 2
       while (lsPrime.length <= nPrime) {
         var isPrime = true;
-        var maxCheckNum = num/2;
+        var maxCheckNum = num / 2;
 
         //check if number is prime by dividing it with the prime in list,
         // do not check numbers higher than num/2,
@@ -50,7 +50,7 @@ angular.module('primeTableApp')
             break;
           }
         }
-        if(isPrime) {
+        if (isPrime) {
           lsPrime.push(num);
         }
 
@@ -61,21 +61,42 @@ angular.module('primeTableApp')
       $scope.storePrime.maxCheckNum = num;
     };
 
-    $scope.displayPrimes = function() {
-      if($scope.storePrime.list.length - 1 > $scope.nPrime) {
+    $scope.displayPrimes = function () {
+      if ($scope.storePrime.list.length - 1 > $scope.nPrime) {
         $scope.findPrimes($scope.nPrime);
       }
-      $scope.lsPrime = $scope.storePrime.list.slice(0, parseInt($scope.nPrime)+ 1);
+      $scope.lsPrime = $scope.storePrime.list.slice(0, parseInt($scope.nPrime) + 1);
     };
 
     $scope.update = function () {
 
-      $scope.findPrimes($scope.nPrime);
+      //Check user input
+      var nPrime = Number($scope.nPrime);
+      if (!nPrime) {
+        if($scope.nPrime === '') {
+          $scope.communication = 'Please enter a number';
+          $scope.style = '';
+        } else {
+          $scope.communication = 'You\'ve type on incorrect number';
+          $scope.style = 'bg-danger';
+        }
+        $scope.lsPrime = [];
+        return;
+      }
+
+      if (0 !== nPrime - Math.floor(nPrime)) {
+        $scope.communication = 'Please enter whole numbers only';
+        $scope.style = 'bg-danger';
+        $scope.lsPrime = [];
+        return;
+      }
+
+      $scope.findPrimes(nPrime);
 
       var tooBig;
       $scope.style = '';
 
-      if($scope.nPrime < 300) {
+      if (nPrime < 300) {
         $scope.displayPrimes();
       } else {
         $scope.lsPrime = [];
@@ -85,29 +106,24 @@ angular.module('primeTableApp')
 
       var nth = 'th',
         strNum = $scope.nPrime.toString(),
-        lastNum = strNum.slice(strNum.length -1);
-      if( lastNum === '1' && strNum !== '11') {
+        lastNum = strNum.slice(strNum.length - 1);
+      if (lastNum === '1' && strNum !== '11') {
         nth = 'st';
-      } else if ( lastNum === '2' && strNum !== '12' )  {
+      } else if (lastNum === '2' && strNum !== '12') {
         nth = 'nd';
-      } else if ( lastNum === '3' && strNum !== '13'){
+      } else if (lastNum === '3' && strNum !== '13') {
         nth = 'rd';
       }
-      $scope.communication = [tooBig, 'The ',$scope.nPrime,nth,' prime is ',$scope.storePrime.list[$scope.nPrime]].join('');
+      $scope.communication = [tooBig, 'The ', nPrime, nth, ' prime is ', $scope.storePrime.list[nPrime]].join('');
 
     };
 
     //init
     $scope.displayPrimes();
 
-    $scope.$watch('nPrime', function() {
+    $scope.$watch('nPrime', function () {
 
-      if(!Number($scope.nPrime)) {
-        $scope.communication = 'You\'ve type on incorrect number';
-        $scope.style = 'bg-danger';
-        $scope.lsPrime = [];
-        return;
-      }
       $scope.update();
+
     });
   });
