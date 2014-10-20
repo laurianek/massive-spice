@@ -18,5 +18,7 @@ To run test
 -----------
 
 Run command 
+
     grunt test
+    
 after installing all dependencies.
